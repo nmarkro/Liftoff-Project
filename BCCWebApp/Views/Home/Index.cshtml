@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+    <div class="text-center">
+        @if (User?.Identity?.IsAuthenticated ?? false)
+        {
+            <h1 class="display-4">Welcome @User.Identity.Name</h1>
+            <p>
+                @foreach (var claim in User.Claims)
+                {
+                    <div><code>@claim.Type</code>: <strong>@claim.Value</strong></div>
+                }
+            </p>
+            <a class="btn btn-lg btn-success" href="/signout">Sign out</a>
+        }
+        else
+        {
+            <h1 class="display-4">Welcome</h1>
+            <form action="/signin" method="post">
+                <button class="btn btn-lg btn-success m-1" type="submit">Connect with Twitch</button>
+            </form>
+        }
+    </div>
