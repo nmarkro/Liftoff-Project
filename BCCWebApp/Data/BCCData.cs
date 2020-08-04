@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace BCCWebApp.Data
@@ -17,7 +15,7 @@ namespace BCCWebApp.Data
         {
             get
             {
-                return string.Format("~/images/ncgen/icon/{0}.png", Id);
+                return string.Format("../images/ncgen/icon/{0}.png", Id);
             }
         }
 
@@ -419,13 +417,13 @@ namespace BCCWebApp.Data
 
         public static List<Operator> Operators = new List<Operator>
         {
-            new Operator(0x32, "Lan (MegaMan)", 60),
-            new Operator(0x33, "Mayl (Roll)", 70),
-            new Operator(0x34, "Dex (GutsMan)", 30),
-            new Operator(0x35, "Chaud (ProtoMan)", 70),
-            new Operator(0x36, "Kai (TurboMan)", 80),
-            new Operator(0x37, "Mary (Ring)", 80),
-            new Operator(0x38, "Bass", 50)
+            new Operator(0x32, "Lan (MegaMan)",     60),
+            new Operator(0x33, "Mayl (Roll)",       70),
+            new Operator(0x34, "Dex (GutsMan)",     30),
+            new Operator(0x35, "Chaud (ProtoMan)",  70),
+            new Operator(0x36, "Kai (TurboMan)",    80),
+            new Operator(0x37, "Mary (Ring)",       80),
+            new Operator(0x38, "Bass",              50)
         };
 
         public static Dictionary<string, int> CodeTypes = new Dictionary<string, int>

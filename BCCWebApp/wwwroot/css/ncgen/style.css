@@ -55,7 +55,11 @@
     border-spacing: 0px;
     box-shadow: -1px -1px 0 0 #FFAD29, 1px 1px 0 0 #C66331, 1px 1px 0 1px #111, 0 0 0 1px #FFAD29 inset, 0 0 0 2px #C66331 inset, 0 0 0 3px #42525A inset;
     border-collapse: initial;
-    line-height: 1;
+    line-height: normal;
+}
+
+.deck td {
+    vertical-align: middle;
 }
 
 .deck select {
@@ -94,9 +98,21 @@
     box-shadow: -1px 0 0 0 black, 1px 0 0 0 black;
 }
 
-.chip-box select {
+.chip-box select,
+.chip-box span{
     background: #F7EFCE;
     color: #101010;
+}
+
+.chip-box span {
+    font-family: sans-serif;
+    font-size: 13px;
+    width: 14ex;
+    height: 16px;
+    vertical-align: middle;
+    text-align: left;
+    border: none;
+    display: inline-block;
 }
 
 .chip-box:first-child {
@@ -107,7 +123,8 @@
     background: #5A6B6B;
 }
 
-.chip-box-navi select {
+.chip-box-navi select,
+.chip-box-navi span {
     background: #5A6B6B;
     color: #F7EFCE;
 }

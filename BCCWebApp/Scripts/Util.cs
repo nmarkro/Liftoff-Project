@@ -1,7 +1,11 @@
 ﻿using BCCWebApp.Data;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BCCWebApp.Scripts
@@ -24,6 +28,25 @@ namespace BCCWebApp.Scripts
             string naviCode = Encode(data);
 
             return naviCode;
+        }
+
+        public static int[] UnpackNaviCode(string name, string naviCode)
+        {
+            int[] nameBytes = GetNameBytes(name);
+            int[] data = Decode(naviCode);
+
+            data = Crypt(nameBytes, data);
+
+            if(CalcChecksum(data) != data[14])
+            {
+                return null;
+            }
+
+            data = Shift(data, nameBytes[1] + nameBytes[3]);
+            data = Crypt(nameBytes, data);
+            data = Unshift(data, nameBytes[0] + nameBytes[2]);
+
+            return data;
         }
 
         public static int[] GetNameBytes(string name)
@@ -105,6 +128,50 @@ namespace BCCWebApp.Scripts
             }
 
             return naviCode;
+        }
+
+        public static int[] Decode(string naviCode)
+        {
+            int[] passBytes = new int[24];
+            for (int i = 0; i < 24; i++)
+            {
+                passBytes[i] = BCCData.PassChars.IndexOf(naviCode[i]);
+            }
+
+            int[] data = new int[15];
+            for (int i = 14; i >= 0; i--)
+            {
+                int b = 0;
+                for (int j = 23; j >= 0; j--)
+                {
+                    int v = passBytes[j] + b * 36;
+                    passBytes[j] = v >> 8;
+                    b = v & 0xFF;
+                }
+                data[i] = b;
+            }
+            return data;
+        }
+
+        public static string Normalize(string naviCode)
+        {
+            return naviCode.Replace("-", "")
+                .Replace(" ", "")
+                .Replace("♠", "A")
+                .Replace("s", "A")
+                .Replace("♣", "E")
+                .Replace("c", "E")
+                .Replace("♥", "I")
+                .Replace("h", "I")
+                .Replace("★", "O")
+                .Replace("*", "O")
+                .Replace("♦", "U")
+                .Replace("d", "U");
+        }
+
+        public static string Decorate(string naviCode)
+        {
+            return Regex.Replace(naviCode, ".{4}(?!$)", "$0-");
         }
     }
 }

@@ -1,0 +1,71 @@
+﻿@model BCCWebApp.ViewModel.DeckViewerViewModel;
+
+<table class="deck">
+    <tr>
+        <td class="deck-c1">
+            <div class="box-lr box-r">
+                <span class="label-lr">R</span>
+                <div class="chip-box">
+                    <img width="16" height="16" class="chip-icon ChipIconR" src="@Model.ChipR.IconUrl">
+                    <span class="chip ChipR">@Model.ChipR.Name</span>
+                </div>
+            </div>
+            <span class="label-lr">Navi</span>
+            <div class="chip-box chip-box-navi">
+                <img width="16" height="16" class="chip-icon ChipIconNavi" src="@Model.ChipNavi.IconUrl">
+                <span class="chip-navi">@Model.ChipNavi.Name</span>
+            </div>
+            <div class="box-lr box-l">
+                <span class="label-lr">L</span>
+                <div class="chip-box">
+                    <img width="16" height="16" class="chip-icon ChipIconL" src="@Model.ChipL.IconUrl">
+                    <span class="chip ChipL">@Model.ChipL.Name</span>
+                </div>
+            </div>
+        <td><img src="~/images/ncgen/pipe1.png" width="8" height="13"></td>
+        <td class="deck-c2">
+            <div class="chip-box">
+                <img width="16" height="16" class="chip-icon ChipIcon1a" src="@Model.Chip1a.IconUrl">
+                <span class="chip Chip1a">@Model.Chip1a.Name</span>
+            </div>
+            <div class="chip-box">
+                <img width="16" height="16" class="chip-icon ChipIcon1b" src="@Model.Chip1b.IconUrl">
+                <span class="chip Chip1b">@Model.Chip1b.Name</span>
+            </div>
+        </td>
+        <td><img src="~/images/ncgen/pipe2.png" width="8" height="30"></td>
+        <td class="deck-c3">
+            <div class="chip-box">
+                <img width="16" height="16" class="chip-icon ChipIcon2a" src="@Model.Chip2a.IconUrl">
+                <span class="chip Chip2a">@Model.Chip2a.Name</span>
+            </div>
+            <div class="chip-box">
+                <img width="16" height="16" class="chip-icon ChipIcon2b" src="@Model.Chip2b.IconUrl">
+                <span class="chip Chip2b">@Model.Chip2b.Name</span>
+            </div>
+            <div class="chip-box">
+                <img width="16" height="16" class="chip-icon ChipIcon2c" src="@Model.Chip2c.IconUrl">
+                <span class="chip Chip2c">@Model.Chip2c.Name</span>
+            </div>
+        </td>
+        <td><img src="~/images/ncgen/pipe3.png" width="8" height="47"></td>
+        <td class="deck-c4">
+            <div class="chip-box">
+                <img width="16" height="16" class="chip-icon ChipIcon3a" src="@Model.Chip3a.IconUrl">
+                <span class="chip Chip3a">@Model.Chip3a.Name</span>
+            </div>
+            <div class="chip-box">
+                <img width="16" height="16" class="chip-icon ChipIcon3b" src="@Model.Chip3b.IconUrl">
+                <span class="chip Chip3b">@Model.Chip3b.Name</span>
+            </div>
+            <div class="chip-box">
+                <img width="16" height="16" class="chip-icon ChipIcon3c" src="@Model.Chip3c.IconUrl">
+                <span class="chip Chip3c">@Model.Chip3c.Name</span>
+            </div>
+            <div class="chip-box">
+                <img width="16" height="16" class="chip-icon ChipIcon3d" src="@Model.Chip3d.IconUrl">
+                <span class="chip Chip3d">@Model.Chip3d.Name</span>
+            </div>
+        </td>
+    </tr>
+</table>

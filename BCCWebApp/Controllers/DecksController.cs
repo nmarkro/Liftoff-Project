@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BCCWebApp.Data;
 using BCCWebApp.Models;
@@ -60,14 +57,20 @@ namespace BCCWebApp.Controllers
             return View("Add", addDeckViewModel);
         }
 
-
         [Authorize]
         [HttpPut("/decks/SetChosenDeck")]
         public void SetChosenDeck(int chosenId)
         {
-            User appUser = context.Users.Where(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault();
-            appUser.CurrentDeckId = chosenId;
-            context.SaveChanges();
+            Deck chosenDeck = context.Decks.Where(d => d.Id == chosenId).FirstOrDefault();
+            if (chosenDeck != null)
+            {
+                if (chosenDeck.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                {
+                    User appUser = context.Users.Where(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault();
+                    appUser.CurrentDeckId = chosenId;
+                    context.SaveChanges();
+                }
+            }
         }
 
         private Deck GenerateNewDeck(AddDeckViewModel addDeckViewModel)
@@ -101,14 +104,13 @@ namespace BCCWebApp.Controllers
                 addDeckViewModel.Chip3d,
                 addDeckViewModel.ChipR,
                 addDeckViewModel.ChipL,
-                BCCData.CodeTypes["Game Boy Advance"],
-                0,
+                BCCData.CodeTypes["Game Boy Advance"],  // Code type here doesn't matter, just default to GBA
+                0,                                      // Checksum (will be calculated later)
             };
 
             string naviCode = Util.PackNaviCode(naviName, data);
-            naviCode = Regex.Replace(naviCode, ".{4}(?!$)", "$0-");
+            naviCode = Util.Decorate(naviCode);
             
-
             Deck newDeck = new Deck
             {
                 UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value,
