@@ -1,6 +1,15 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+<script type="text/javascript">
+    function SetChosenDeck(chosenId) {
+        $.ajax({
+            url: '/Decks/SetChosenDeck',
+            type: 'PUT',
+            data: { chosenId: chosenId, }
+        });
+    }
+</script>
 <h1 class="display-4">Your Decks</h1>
 
 
@@ -22,7 +31,17 @@ else
         @foreach (Deck deck in ViewBag.Decks)
         {
             <tr>
-                <td>@*selected deck checkbox here*@</td>
+        
+                <td>
+                    @if (deck.Id == ViewBag.SelectedDeckId)
+                    {
+                        <input type="radio" name="chosen-deck" onclick="SetChosenDeck(@deck.Id);" value="@deck.Id" checked="checked" />
+                    }
+                    else
+                    {
+                        <input type="radio" name="chosen-deck" onclick="SetChosenDeck(@deck.Id);" value="@deck.Id" />
+                    }
+                </td>
                 <td>@deck.Name</td>
                 <td>@deck.NaviName</td>
                 <td>@deck.NaviCode</td>

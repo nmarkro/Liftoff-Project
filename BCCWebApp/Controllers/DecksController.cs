@@ -30,6 +30,7 @@ namespace BCCWebApp.Controllers
         public IActionResult Index()
         {
             ViewBag.Decks = context.Decks.Where(d => d.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value).ToList();
+            ViewBag.SelectedDeckId = context.Users.Where(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().CurrentDeckId;
 
             return View();
         }
@@ -57,6 +58,16 @@ namespace BCCWebApp.Controllers
             }
 
             return View("Add", addDeckViewModel);
+        }
+
+
+        [Authorize]
+        [HttpPut("/decks/SetChosenDeck")]
+        public void SetChosenDeck(int chosenId)
+        {
+            User appUser = context.Users.Where(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault();
+            appUser.CurrentDeckId = chosenId;
+            context.SaveChanges();
         }
 
         private Deck GenerateNewDeck(AddDeckViewModel addDeckViewModel)
