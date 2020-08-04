@@ -26,34 +26,35 @@ namespace BCCWebApp.Migrations
                     b.Property<int>("Battles")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("NaviCode")
-                        .HasColumnType("varchar(24) CHARACTER SET utf8mb4")
-                        .HasMaxLength(24);
+                        .HasColumnType("varchar(29) CHARACTER SET utf8mb4")
+                        .HasMaxLength(29);
 
                     b.Property<string>("NaviName")
                         .HasColumnType("varchar(4) CHARACTER SET utf8mb4")
                         .HasMaxLength(4);
 
-                    b.Property<string>("TwitchUserId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+                    b.Property<string>("UserId")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int>("Wins")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TwitchUserId");
-
                     b.ToTable("Decks");
                 });
 
-            modelBuilder.Entity("BCCWebApp.Models.TwitchUser", b =>
+            modelBuilder.Entity("BCCWebApp.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<string>("AccessToken")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                    b.Property<int?>("CurrentDeckId")
+                        .HasColumnType("int");
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -64,22 +65,6 @@ namespace BCCWebApp.Migrations
                     b.Property<string>("ProfileImageUrl")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TwitchUsers");
-                });
-
-            modelBuilder.Entity("BCCWebApp.Models.User", b =>
-                {
-                    b.Property<string>("TwitchUserId")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
-                    b.Property<int?>("CurrentDeckId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("TorunamentRegistered")
                         .HasColumnType("tinyint(1)");
 
@@ -89,31 +74,9 @@ namespace BCCWebApp.Migrations
                     b.Property<int>("TotalWins")
                         .HasColumnType("int");
 
-                    b.HasKey("TwitchUserId");
-
-                    b.HasIndex("CurrentDeckId");
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("BCCWebApp.Models.Deck", b =>
-                {
-                    b.HasOne("BCCWebApp.Models.TwitchUser", "TwitchUser")
-                        .WithMany()
-                        .HasForeignKey("TwitchUserId");
-                });
-
-            modelBuilder.Entity("BCCWebApp.Models.User", b =>
-                {
-                    b.HasOne("BCCWebApp.Models.Deck", "CurrentDeck")
-                        .WithMany()
-                        .HasForeignKey("CurrentDeckId");
-
-                    b.HasOne("BCCWebApp.Models.TwitchUser", "TwitchUser")
-                        .WithMany()
-                        .HasForeignKey("TwitchUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

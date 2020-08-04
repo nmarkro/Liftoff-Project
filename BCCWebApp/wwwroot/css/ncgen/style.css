@@ -1,0 +1,167 @@
+/*Deck form code modified and based on https://therockmanexezone.com/ncgen/ by Prof9 (https://github.com/Prof9)*/
+
+.code {
+    width: 100%;
+}
+
+.mb {
+    font-weight: bold;
+}
+
+.mb span {
+    display: inline-block;
+}
+
+.mb-current {
+    width: 3.25ex;
+    margin-right: 0.5ex;
+}
+
+.mb-max {
+    width: 3.25ex;
+    margin-left: 0.5ex;
+}
+
+.slotin {
+    vertical-align: baseline;
+}
+
+.invalid {
+    font-weight: bold;
+    color: red;
+    display: none;
+}
+
+.msg div {
+    margin-top: 5px;
+    border: 1px solid gray;
+    padding: 5px 10px;
+    background: #FF8;
+    border-radius: 2px;
+    opacity: 0;
+    transition: all 1s;
+}
+
+.deck {
+    font-family: sans-serif;
+    font-size: 11px;
+    border: 2px solid #F78C08;
+    border-radius: 6px;
+    background: #636B73;
+    white-space: nowrap;
+    text-align: right;
+    padding: 6px;
+    margin: 4px 0;
+    border-spacing: 0px;
+    box-shadow: -1px -1px 0 0 #FFAD29, 1px 1px 0 0 #C66331, 1px 1px 0 1px #111, 0 0 0 1px #FFAD29 inset, 0 0 0 2px #C66331 inset, 0 0 0 3px #42525A inset;
+    border-collapse: initial;
+    line-height: 1;
+}
+
+.deck select {
+    font-family: sans-serif;
+    font-size: 13px;
+    width: 14ex;
+    height: 16px;
+    vertical-align: middle;
+    border: none;
+    background: white;
+}
+
+.deck tr {
+    border: none;
+}
+
+.deck td {
+    padding: 0;
+    border: none;
+}
+
+.deck img {
+    float: left;
+    vertical-align: middle;
+    image-rendering: optimizeSpeed;
+    image-rendering: pixelated;
+}
+
+.chip-box {
+    border: 1px solid #101010;
+    border-left: none;
+    border-right: none;
+    padding: 0;
+    border-top: none;
+    background: #F7EFCE;
+    box-shadow: -1px 0 0 0 black, 1px 0 0 0 black;
+}
+
+.chip-box select {
+    background: #F7EFCE;
+    color: #101010;
+}
+
+.chip-box:first-child {
+    border-top: 1px solid #101010;
+}
+
+.chip-box-navi {
+    background: #5A6B6B;
+}
+
+.chip-box-navi select {
+    background: #5A6B6B;
+    color: #F7EFCE;
+}
+
+.deck-c1 {
+    position: relative;
+    text-align: right;
+}
+
+.deck-c1 .chip-box {
+    border: 1px solid #101010;
+    border-right: none;
+    display: inline-block;
+    box-shadow: 1px 0 0 0 black;
+}
+
+.deck-c4 .chip-box {
+    border-right: 1px solid #101010;
+    box-shadow: -1px 0 0 0 black;
+}
+
+.box-lr {
+    position: absolute;
+    right: 0;
+}
+
+.box-r {
+    top: 0;
+}
+
+.box-l {
+    bottom: 0;
+}
+
+.label-lr {
+    padding: 0 5px;
+    background: #AAC;
+    color: white;
+    border-radius: 5px;
+    vertical-align: middle;
+}
+
+#insert-buttons span {
+    cursor: pointer;
+    background: white;
+    border: 1px solid gray;
+    width: 25px;
+    padding: 0 5px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 2px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

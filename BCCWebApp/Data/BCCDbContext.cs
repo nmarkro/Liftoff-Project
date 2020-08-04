@@ -10,7 +10,6 @@ namespace BCCWebApp.Data
 {
     public class BCCDbContext : DbContext
     {
-        public DbSet<TwitchUser> TwitchUsers { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Deck> Decks { get; set; }
 

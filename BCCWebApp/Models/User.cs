@@ -10,24 +10,25 @@ namespace BCCWebApp.Models
 {
     public class User
     {
-        [Key]
-        [ForeignKey("TwitchUser")]
-        public string TwitchUserId { get; set; }
-        public TwitchUser TwitchUser { get; set; }
+        public string Id { get; set; }
+        public string Login { get; set; }
+        public string DisplayName { get; set; }
+        public string ProfileImageUrl { get; set; }
         public int TotalWins { get; set; }
         public int TotalBattles { get; set; }
         public int? CurrentDeckId { get; set; }
-        public virtual Deck CurrentDeck { get; set; }
         public bool TorunamentRegistered { get; set; }
 
         public User()
         {
         }
 
-        public User(TwitchUser twitchUser)
+        public User(string id, string login, string displayName, string profileImageUrl)
         {
-            this.TwitchUser = twitchUser;
-            TwitchUserId = twitchUser.Id;
+            Id = id;
+            Login = login;
+            DisplayName = displayName;
+            ProfileImageUrl = profileImageUrl;
             TotalWins = 0;
             TotalBattles = 0;
             TorunamentRegistered = false;

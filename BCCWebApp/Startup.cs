@@ -61,8 +61,8 @@ namespace BCCWebApp
                     options.UserInformationEndpoint = "https://api.twitch.tv/helix/users";
                     options.SaveTokens = true;
                     options.ClaimActions.MapCustomJson(ClaimTypes.NameIdentifier, user => GetJsonData(user, "id"));
-                    options.ClaimActions.MapCustomJson(ClaimTypes.Name, user => GetJsonData(user, "login"));
-                    options.ClaimActions.MapCustomJson("urn:twitch:display_name", user => GetJsonData(user, "display_name"));
+                    options.ClaimActions.MapCustomJson(ClaimTypes.Name, user => GetJsonData(user, "display_name"));
+                    options.ClaimActions.MapCustomJson("urn:twitch:login", user => GetJsonData(user, "login"));
                     options.ClaimActions.MapCustomJson("urn:twitch:profile_image_url", user => GetJsonData(user, "profile_image_url"));
                     options.Events = new OAuthEvents
                     {

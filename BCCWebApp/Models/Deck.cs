@@ -10,12 +10,12 @@ namespace BCCWebApp.Models
     public class Deck
     {
         public int Id { get; set; }
-        [ForeignKey("TwitchUser")]
-        public string TwitchUserId { get; set; }
-        public TwitchUser TwitchUser { get; set; }
+        [ForeignKey("User")]
+        public string UserId { get; set; }
+        public string Name { get; set; }
         [StringLength(4, MinimumLength = 1)]
         public string NaviName { get; set; }
-        [StringLength(24, MinimumLength = 24)]
+        [StringLength(29, MinimumLength = 29)]
         public string NaviCode { get; set; }
         public int Wins { get; set; }
         public int Battles { get; set; }

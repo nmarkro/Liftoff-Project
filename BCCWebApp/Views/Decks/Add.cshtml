@@ -1,0 +1,174 @@
+﻿@model BCCWebApp.ViewModel.AddDeckViewModel;
+
+@*Deck form code modified and based on https://therockmanexezone.com/ncgen/ by Prof9 (https://github.com/Prof9)*@
+<link rel="stylesheet" href="~/css/ncgen/style.css">
+<script src="~/js/ncgen/data.js"></script>
+<script type="text/javascript">
+    function getChipMB(name) {
+        var chip = parseInt(document.getElementsByName(name)[0].value);
+        if (chip <= 0) {
+            return 0;
+        }
+        var mb = NCData.mb[chip];
+        return mb;
+    }
+
+    function updateChipIcon(name) {
+        var chip = parseInt(document.getElementsByName(name)[0].value);
+        if (chip < 0 || (chip > 190 && chip < 200) || chip > 248) {
+            chip = 0;
+        }
+        var img = document.getElementsByClassName(name.replace('Chip', 'ChipIcon'))[0];
+        img.src = "../images/ncgen/icon/" + chip + ".png";
+    }
+
+
+    function updateDeck() {
+        var maxMB = getChipMB('ChipNavi');
+
+        var curMB = 0;
+        curMB += getChipMB('Chip1a');
+        curMB += getChipMB('Chip1b');
+        curMB += getChipMB('Chip2a');
+        curMB += getChipMB('Chip2b');
+        curMB += getChipMB('Chip2c');
+        curMB += getChipMB('Chip3a');
+        curMB += getChipMB('Chip3b');
+        curMB += getChipMB('Chip3c');
+        curMB += getChipMB('Chip3d');
+
+        var operator = parseInt(document.getElementsByName("Operator")[0].value);
+        document.getElementsByClassName('slotin')[0].innerHTML = NCData.slotIn[operator];
+
+        document.getElementsByClassName('mb-current')[0].innerHTML = curMB;
+        document.getElementsByClassName('mb-max')[0].innerHTML = maxMB;
+
+        var mbElem = document.getElementsByClassName('mb')[0];
+        if (curMB > maxMB) {
+            mbElem.style.fontWeight = 'bold';
+            mbElem.style.color = 'red';
+        } else {
+            mbElem.style.fontWeight = '';
+            mbElem.style.color = '';
+        }
+
+        updateChipIcon('ChipR');
+        updateChipIcon('ChipNavi');
+        updateChipIcon('ChipL');
+        updateChipIcon('Chip1a');
+        updateChipIcon('Chip1b');
+        updateChipIcon('Chip2a');
+        updateChipIcon('Chip2b');
+        updateChipIcon('Chip2c');
+        updateChipIcon('Chip3a');
+        updateChipIcon('Chip3b');
+        updateChipIcon('Chip3c');
+        updateChipIcon('Chip3d');
+    }
+</script>
+
+<form asp-controller="Decks" asp-action="ProcessAddDeckForm" method="post">
+    <table style="width: 520px; border-collapse: collapse; border-spacing: 0; text-align: left; margin: auto;">
+        <tr>
+            <td style="width: 1px; white-space: nowrap;">
+                <label asp-for="DeckName">Deck Name:</label>
+            </td>
+            <td colspan="9999">
+                <input style="width: 100%" asp-for="DeckName" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 1px; white-space: nowrap;">
+                <label asp-for="Operator">Operator:</label>
+            </td>
+            <td colspan="9999">
+                <select class="operator" asp-for="Operator" asp-items="Model.Operators" onchange="updateDeck();"></select>
+                <span style="color: grey; font-size: smaller">(Slots in at <span class="slotin">--</span>%)</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4"></td>
+            <td class="mb" style="text-align: right;">
+                <span>MB: </span>
+                <span class="mb-current">0</span><span>/</span><span class="mb-max">0</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <table class="deck">
+                    <tr>
+                        <td class="deck-c1">
+                            <div class="box-lr box-r">
+                                <label class="label-lr" asp-for="ChipR">R</label>
+                                <div class="chip-box">
+                                    <img width="16" height="16" class="chip-icon ChipIconR" src="~/images/ncgen/icon/0.png">
+                                    <select class="chip" asp-for="ChipR" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="label-lr" asp-for="ChipNavi">Navi</label>
+                                <div class="chip-box chip-box-navi">
+                                    <img width="16" height="16" class="chip-icon ChipIconNavi" src="~/images/ncgen/icon/200.png">
+                                    <select class="chip-navi" asp-for="ChipNavi" asp-items="Model.NaviChips" onchange="updateDeck();"></select>
+                                </div>
+                            </div>
+                            <div class="box-lr box-l">
+                                <label class="label-lr" asp-for="ChipL">L</label>
+                                <div class="chip-box">
+                                    <img width="16" height="16" class="chip-icon ChipIconL" src="~/images/ncgen/icon/0.png">
+                                    <select class="chip" asp-for="ChipL" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                                </div>
+                            </div>
+                        <td><img src="~/images/ncgen/pipe1.png" width="8" height="13"></td>
+                        <td class="deck-c2">
+                            <div class="chip-box">
+                                <img width="16" height="16" class="chip-icon ChipIcon1a" src="~/images/ncgen/icon/0.png">
+                                <select class="chip" asp-for="Chip1a" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                            </div>
+                            <div class="chip-box">
+                                <img width="16" height="16" class="chip-icon ChipIcon1b" src="~/images/ncgen/icon/0.png">
+                                <select class="chip" asp-for="Chip1b" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                            </div>
+                        </td>
+                        <td><img src="~/images/ncgen/pipe2.png" width="8" height="30"></td>
+                        <td class="deck-c3">
+                            <div class="chip-box">
+                                <img width="16" height="16" class="chip-icon ChipIcon2a" src="~/images/ncgen/icon/0.png">
+                                <select class="chip" asp-for="Chip2a" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                            </div>
+                            <div class="chip-box">
+                                <img width="16" height="16" class="chip-icon ChipIcon2b" src="~/images/ncgen/icon/0.png">
+                                <select class="chip" asp-for="Chip2b" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                            </div>
+                            <div class="chip-box">
+                                <img width="16" height="16" class="chip-icon ChipIcon2c" src="~/images/ncgen/icon/0.png">
+                                <select class="chip" asp-for="Chip2c" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                            </div>
+                        </td>
+                        <td><img src="~/images/ncgen/pipe3.png" width="8" height="47"></td>
+                        <td class="deck-c4">
+                            <div class="chip-box">
+                                <img width="16" height="16" class="chip-icon ChipIcon3a" src="~/images/ncgen/icon/0.png">
+                                <select class="chip" asp-for="Chip3a" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                            </div>
+                            <div class="chip-box">
+                                <img width="16" height="16" class="chip-icon ChipIcon3b" src="~/images/ncgen/icon/0.png">
+                                <select class="chip" asp-for="Chip3b" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                            </div>
+                            <div class="chip-box">
+                                <img width="16" height="16" class="chip-icon ChipIcon3c" src="~/images/ncgen/icon/0.png">
+                                <select class="chip" asp-for="Chip3c" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                            </div>
+                            <div class="chip-box">
+                                <img width="16" height="16" class="chip-icon ChipIcon3d" src="~/images/ncgen/icon/0.png">
+                                <select class="chip" asp-for="Chip3d" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <input type="submit" value="Submit" />
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">updateDeck();</script>
