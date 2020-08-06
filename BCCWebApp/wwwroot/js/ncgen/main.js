@@ -16,25 +16,25 @@
 				}
 			}
 			
-			fillOptions('chip', NCData.chips);
+			/*fillOptions('chip', NCData.chips);
 			fillOptions('chip-navi', NCData.naviChips);
 			fillOptions('operator', NCData.operators);
-			fillOptions('code-type', NCData.codeTypes);
+			fillOptions('code-type', NCData.codeTypes);*/
 			
-			var codeTypeSelects = document.getElementsByClassName('code-type');
+			/*var codeTypeSelects = document.getElementsByClassName('code-type');
 			for (var s = 0; s < codeTypeSelects.length; s++) {
 				codeTypeSelects[s].value = NCData.codeTypes[0x01];
-			}
+			}*/
 			
 			for (var i = 0; i <= 190; i++) {
 				chipIcons[i] = new Image(16, 16);
 				chipIcons[i].className = 'chip-icon';
-				chipIcons[i].src = '../images/ncgen/icon/' + i + '.png';
+				chipIcons[i].src = "../../images/ncgen/icon/" + i + ".png";
 			}
 			for (var i = 200; i <= 248; i++) {
 				chipIcons[i] = new Image(16, 16);
 				chipIcons[i].className = 'chip-icon';
-				chipIcons[i].src = '../images/ncgen/icon/' + i + '.png';
+				chipIcons[i].src = "../../images/ncgen/icon/" + i + ".png";
 			}
 			
 			this.update();
@@ -54,16 +54,16 @@
 				return mb;
 			}
 			function updateChipIcon(className, data) {
-				var chipName = document.getElementsByClassName(className)[i].value;
+				var chipName = document.getElementsByClassName(className)[i].innerHTML;
 				var chip = data.indexOf(chipName);
 				if (chip < 0 || (chip > 190 && chip < 200) || chip > 248) {
 					chip = 0;
 				}
-				var img = document.getElementsByClassName('chip-icon-' + className.replace('chip-', ''))[i];
-				img.src = chipIcons[chip].src;
+				var img = document.getElementsByClassName('ChipIcon' + className.replace('Chip', ''))[i];
+				img.src = "../../images/ncgen/icon/" + chip + ".png";
 			}
 			
-			var maxMB = getChipMB('chip-navi', NCData.naviChips);
+/*			var maxMB = getChipMB('chip-navi', NCData.naviChips);
 			
 			var curMB = 0;
 			curMB += getChipMB('chip-1a', NCData.chips);
@@ -97,21 +97,21 @@
 			}
 			
 			document.getElementsByClassName('invalid')[i].style.display = invalid ? 'inline' : 'none';
-			
-			updateChipIcon('chip-r'   , NCData.chips);
-			updateChipIcon('chip-navi', NCData.naviChips);
-			updateChipIcon('chip-l'   , NCData.chips);
-			updateChipIcon('chip-1a'  , NCData.chips);
-			updateChipIcon('chip-1b'  , NCData.chips);
-			updateChipIcon('chip-2a'  , NCData.chips);
-			updateChipIcon('chip-2b'  , NCData.chips);
-			updateChipIcon('chip-2c'  , NCData.chips);
-			updateChipIcon('chip-3a'  , NCData.chips);
-			updateChipIcon('chip-3b'  , NCData.chips);
-			updateChipIcon('chip-3c'  , NCData.chips);
-			updateChipIcon('chip-3d'  , NCData.chips);
+			*/
+			updateChipIcon('ChipR'   , NCData.chips);
+			updateChipIcon('ChipNavi', NCData.naviChips);
+			updateChipIcon('ChipL'   , NCData.chips);
+			updateChipIcon('Chip1a'  , NCData.chips);
+			updateChipIcon('Chip1b'  , NCData.chips);
+			updateChipIcon('Chip2a'  , NCData.chips);
+			updateChipIcon('Chip2b'  , NCData.chips);
+			updateChipIcon('Chip2c'  , NCData.chips);
+			updateChipIcon('Chip3a'  , NCData.chips);
+			updateChipIcon('Chip3b'  , NCData.chips);
+			updateChipIcon('Chip3c'  , NCData.chips);
+			updateChipIcon('Chip3d'  , NCData.chips);
 		},
-		
+
 		msgTimers: [],
 		msg: function(msg, i) {
 			if (typeof i === 'undefined') {
@@ -196,52 +196,49 @@
 				i = 0;
 			}
 			
-			var name = document.getElementsByClassName('name')[i].value.toUpperCase();
+			var name = document.getElementsByName('NaviName')[i].value.toUpperCase();
 			if (name.length < 1 || name.length > 4) {
-				this.msg('ERROR: Name must be between 1 and 4 characters long.', i);
+				//this.msg('ERROR: Name must be between 1 and 4 characters long.', i);
 				return;
 			}
 			if (this.util.getNameBytes(name).indexOf(undefined) >= 0) {
-				this.msg('ERROR: Name contains illegal characters.', i);
+				//this.msg('ERROR: Name contains illegal characters.', i);
 				return;
 			}
 			
-			var naviCode = document.getElementsByClassName('code')[i].value;
+			var naviCode = document.getElementsByName('NaviCode')[i].value;
 			naviCode = this.util.normalize(naviCode);
 			if (naviCode.length != 24) {
-				this.msg('ERROR: Navi code must be 24 characters long (excluding dashes or spaces).', i);
+				//this.msg('ERROR: Navi code must be 24 characters long (excluding dashes or spaces).', i);
 				return;
 			}
 			
-			document.getElementsByClassName('name')[i].value = name;
-			document.getElementsByClassName('code')[i].value = this.util.decorate(naviCode);
+			document.getElementsByName('NaviName')[i].value = name;
+			document.getElementsByName('NaviCode')[i].value = this.util.decorate(naviCode);
 			
 			var data = this.unpackNaviCode(name, naviCode, i);
 			if (data.length == 0) {
-				this.msg('ERROR: Invalid Navi code.', i);
+				//this.msg('ERROR: Invalid Navi code.', i);
 				return;
 			}
-			
-			this.util.setValue(i, 'operator', NCData.operators, data[0]);
 			
 			var naviChip = data[1];
 			if (naviChip == 0) {
 				naviChip = NCData.naviChips.indexOf(NCData.operators[data[0]]);
 			}
-			this.util.setValue(i, 'chip-navi', NCData.naviChips, naviChip);
-			
-			this.util.setValue(i, 'chip-1a', NCData.chips, data[2]);
-			this.util.setValue(i, 'chip-1b', NCData.chips, data[3]);
-			this.util.setValue(i, 'chip-2a', NCData.chips, data[4]);
-			this.util.setValue(i, 'chip-2b', NCData.chips, data[5]);
-			this.util.setValue(i, 'chip-2c', NCData.chips, data[6]);
-			this.util.setValue(i, 'chip-3a', NCData.chips, data[7]);
-			this.util.setValue(i, 'chip-3b', NCData.chips, data[8]);
-			this.util.setValue(i, 'chip-3c', NCData.chips, data[9]);
-			this.util.setValue(i, 'chip-3d', NCData.chips, data[10]);
-			this.util.setValue(i, 'chip-r', NCData.chips, data[11]);
-			this.util.setValue(i, 'chip-l', NCData.chips, data[12]);
-			this.util.setValue(i, 'code-type', NCData.codeTypes, data[13]);
+			this.util.setInnerHtml(i, 'ChipNavi', NCData.naviChips, naviChip);
+						 
+			this.util.setInnerHtml(i, 'Chip1a', NCData.chips, data[2]);
+			this.util.setInnerHtml(i, 'Chip1b', NCData.chips, data[3]);
+			this.util.setInnerHtml(i, 'Chip2a', NCData.chips, data[4]);
+			this.util.setInnerHtml(i, 'Chip2b', NCData.chips, data[6]);
+			this.util.setInnerHtml(i, 'Chip2c', NCData.chips, data[5]);
+			this.util.setInnerHtml(i, 'Chip3a', NCData.chips, data[7]);
+			this.util.setInnerHtml(i, 'Chip3b', NCData.chips, data[8]);
+			this.util.setInnerHtml(i, 'Chip3c', NCData.chips, data[9]);
+			this.util.setInnerHtml(i, 'Chip3d', NCData.chips, data[10]);
+			this.util.setInnerHtml(i, 'ChipR', NCData.chips, data[11]);
+			this.util.setInnerHtml(i, 'ChipL', NCData.chips, data[12]);
 			this.update(i);
 			
 			//this.msg('Navi code loaded!', i);
@@ -296,6 +293,9 @@
 			},
 			setValue: function(i, className, data, chip) {
 				document.getElementsByClassName(className)[i].value = data[chip];
+			},
+			setInnerHtml: function (i, className, data, chip) {
+				document.getElementsByClassName(className)[i].innerHTML = data[chip];
 			},
 			getNameBytes: function(name) {
 				var nameBytes = [ 0, 0, 0, 0 ];

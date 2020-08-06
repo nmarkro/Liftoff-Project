@@ -1,0 +1,40 @@
+﻿@model BCCWebApp.ViewModel.ImportDeckViewModel;
+
+<link rel="stylesheet" href="~/css/ncgen/style.css">
+<script type="text/javascript" src="~/js/ncgen/data.js"></script>
+<script type="text/javascript" src="~/js/ncgen/main.js"></script>
+@*<script type="text/javascript">NCGen.init();</script>*@
+<form>
+    <table>
+        <tr>
+            <td style="width: 1px; white-space: nowrap;">
+                <label asp-for="DeckName">Deck Name:</label>
+            </td>
+            <td colspan="9999">
+                <input style="width: 100%" asp-for="DeckName" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 1px; white-space: nowrap;">
+                <label asp-for="NaviName">Navi Name:</label>
+            </td>
+            <td colspan="9999">
+                <input asp-for="NaviName" />
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 1px; white-space: nowrap;">
+                <label asp-for="NaviCode">Navi Code:</label>
+            </td>
+            <td colspan="9999">
+                <input style="width: 100%" asp-for="NaviCode" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="9999">
+                <input type="button" value="Load Navi Code" onclick="NCGen.loadNaviCode();" />
+            </td>
+        </tr>
+    </table>
+    <partial name="_DeckViewer" model="new BCCWebApp.ViewModel.DeckViewerViewModel()" />
+</form>

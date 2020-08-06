@@ -3,6 +3,7 @@ using BCCWebApp.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace BCCWebApp.ViewModel
@@ -22,7 +23,7 @@ namespace BCCWebApp.ViewModel
         public Chip Chip3c { get; set; }
         public Chip Chip3d { get; set; }
 
-        public Chip GetChip(int chipID)
+        private Chip getChip(int chipID)
         {
             Chip chip = BCCData.Chips.Where(c => c.Id == chipID).FirstOrDefault();
             if (chip == null)
@@ -32,24 +33,40 @@ namespace BCCWebApp.ViewModel
             return chip;
         }
 
+        public DeckViewerViewModel()
+        {
+            ChipNavi = getChip(200);
+            Chip1a = getChip(0);
+            Chip1b = getChip(0);
+            Chip2a = getChip(0);
+            Chip2b = getChip(0);
+            Chip2c = getChip(0);
+            Chip3a = getChip(0);
+            Chip3b = getChip(0);
+            Chip3c = getChip(0);
+            Chip3d = getChip(0);
+            ChipR = getChip(0);
+            ChipL = getChip(0);
+        }
+
         public DeckViewerViewModel(string naviName, string naviCode)
         {
             naviCode = Util.Normalize(naviCode);
 
             int[] data = Util.UnpackNaviCode(naviName, naviCode);
 
-            ChipNavi =  GetChip(data[1]);
-            Chip1a =    GetChip(data[2]);
-            Chip1b =    GetChip(data[3]);
-            Chip2a =    GetChip(data[4]);
-            Chip2b =    GetChip(data[5]);
-            Chip2c =    GetChip(data[6]);
-            Chip3a =    GetChip(data[7]);
-            Chip3b =    GetChip(data[8]);
-            Chip3c =    GetChip(data[9]);
-            Chip3d =    GetChip(data[10]);
-            ChipR =     GetChip(data[11]);
-            ChipL =     GetChip(data[12]);
-        }
+            ChipNavi =  getChip(data[1]);
+            Chip1a =    getChip(data[2]);
+            Chip1b =    getChip(data[3]);
+            Chip2a =    getChip(data[4]);
+            Chip2b =    getChip(data[5]);
+            Chip2c =    getChip(data[6]);
+            Chip3a =    getChip(data[7]);
+            Chip3b =    getChip(data[8]);
+            Chip3c =    getChip(data[9]);
+            Chip3d =    getChip(data[10]);
+            ChipR =     getChip(data[11]);
+            ChipL =     getChip(data[12]);
+        }               
     }
 }

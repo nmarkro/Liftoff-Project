@@ -19,8 +19,9 @@
             chip = 0;
         }
         var img = document.getElementsByClassName(name.replace('Chip', 'ChipIcon'))[0];
-        img.src = "../images/ncgen/icon/" + chip + ".png";
+        img.src = "../../images/ncgen/icon/" + chip + ".png";
     }
+
 
     function updateDeck() {
         var maxMB = getChipMB('ChipNavi');
@@ -68,7 +69,8 @@
     }
 </script>
 
-<form asp-controller="Decks" asp-action="ProcessAddDeckForm" method="post">
+<form asp-controller="Decks" asp-action="ProcessEditDeckForm" method="post">
+    <input asp-for="DeckId" value="@Model.DeckId" hidden />
     <table style="width: 520px; border-collapse: collapse; border-spacing: 0; text-align: left; margin: auto;">
         <tr>
             <td style="width: 1px; white-space: nowrap;">
@@ -103,32 +105,32 @@
                                 <label class="label-lr" asp-for="ChipR">R</label>
                                 <div class="chip-box">
                                     <img width="16" height="16" class="chip-icon ChipIconR" src="~/images/ncgen/icon/0.png">
-                                    <select class="chip" asp-for="ChipR" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                                    <select class="chip" asp-for="ChipR" asp-items="Model.Chips" onchange="updateDeck();" value="@Model.ChipR"></select>
                                 </div>
                             </div>
                             <div>
                                 <label class="label-lr" asp-for="ChipNavi">Navi</label>
                                 <div class="chip-box chip-box-navi">
                                     <img width="16" height="16" class="chip-icon ChipIconNavi" src="~/images/ncgen/icon/200.png">
-                                    <select class="chip-navi" asp-for="ChipNavi" asp-items="Model.NaviChips" onchange="updateDeck();"></select>
+                                    <select class="chip-navi" asp-for="ChipNavi" asp-items="Model.NaviChips" onchange="updateDeck();" value="@Model.ChipNavi"></select>
                                 </div>
                             </div>
                             <div class="box-lr box-l">
                                 <label class="label-lr" asp-for="ChipL">L</label>
                                 <div class="chip-box">
                                     <img width="16" height="16" class="chip-icon ChipIconL" src="~/images/ncgen/icon/0.png">
-                                    <select class="chip" asp-for="ChipL" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                                    <select class="chip" asp-for="ChipL" asp-items="Model.Chips" onchange="updateDeck();" value="@Model.ChipL"></select>
                                 </div>
                             </div>
                         <td><img src="~/images/ncgen/pipe1.png" width="8" height="13"></td>
                         <td class="deck-c2">
                             <div class="chip-box">
                                 <img width="16" height="16" class="chip-icon ChipIcon1a" src="~/images/ncgen/icon/0.png">
-                                <select class="chip" asp-for="Chip1a" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                                <select class="chip" asp-for="Chip1a" asp-items="Model.Chips" onchange="updateDeck();" value="@Model.Chip1a"></select>
                             </div>
                             <div class="chip-box">
                                 <img width="16" height="16" class="chip-icon ChipIcon1b" src="~/images/ncgen/icon/0.png">
-                                <select class="chip" asp-for="Chip1b" asp-items="Model.Chips" onchange="updateDeck();"></select>
+                                <select class="chip" asp-for="Chip1b" asp-items="Model.Chips" onchange="updateDeck();" value="@Model.Chip1b"></select>
                             </div>
                         </td>
                         <td><img src="~/images/ncgen/pipe2.png" width="8" height="30"></td>

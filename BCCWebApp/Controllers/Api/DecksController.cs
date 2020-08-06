@@ -13,8 +13,8 @@ namespace BCCWebApp.Controllers.Api
     [ApiController]
     public class DecksController : ControllerBase
     {
-        private Random rnd;
         private readonly BCCDbContext _context;
+        private Random rnd;
 
         public DecksController(BCCDbContext context)
         {
@@ -24,16 +24,28 @@ namespace BCCWebApp.Controllers.Api
 
         // GET: api/Decks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Deck>>> GetDecks([FromQuery] int[] id)
+        public async Task<ActionResult<IEnumerable<Deck>>> GetDecks([FromQuery] int[] id, [FromQuery] bool random = false, [FromQuery] int count = -1)
         {
             List<Deck> decks = await _context.Decks.ToListAsync();
 
             if (id.Length > 0)
             {
-                decks = decks.Where(d => id.Contains(d.Id)).ToList();
+                decks = decks.FindAll(d => id.Contains(d.Id));
             }
 
-            return decks;
+            if (random)
+            {
+                decks = decks.OrderBy(x => rnd.Next()).ToList();
+            }
+
+            if (count > 0)
+            {
+                return decks.Take(count).ToList();
+            }
+            else
+            {
+                return decks;
+            }
         }
     }
 }
