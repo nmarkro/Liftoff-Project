@@ -38,7 +38,7 @@ namespace BCCWebApp.ViewModel
         public int Chip3c { get; set; }
         public int Chip3d { get; set; }
 
-        private Chip getChip(int chipID)
+        private Chip GetChip(int chipID)
         {
             Chip chip = BCCData.Chips.Where(c => c.Id == chipID).FirstOrDefault();
             if (chip == null)
@@ -76,18 +76,18 @@ namespace BCCWebApp.ViewModel
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            int maxMB = getChip(ChipNavi).MB;
+            int maxMB = GetChip(ChipNavi).MB;
 
             int curMB = 0;
-            curMB += getChip(Chip1a).MB;
-            curMB += getChip(Chip1b).MB;
-            curMB += getChip(Chip2a).MB;
-            curMB += getChip(Chip2b).MB;
-            curMB += getChip(Chip2c).MB;
-            curMB += getChip(Chip3a).MB;
-            curMB += getChip(Chip3b).MB;
-            curMB += getChip(Chip3c).MB;
-            curMB += getChip(Chip3d).MB;
+            curMB += GetChip(Chip1a).MB;
+            curMB += GetChip(Chip1b).MB;
+            curMB += GetChip(Chip2a).MB;
+            curMB += GetChip(Chip2b).MB;
+            curMB += GetChip(Chip2c).MB;
+            curMB += GetChip(Chip3a).MB;
+            curMB += GetChip(Chip3b).MB;
+            curMB += GetChip(Chip3c).MB;
+            curMB += GetChip(Chip3d).MB;
 
             if (curMB > maxMB)
             {

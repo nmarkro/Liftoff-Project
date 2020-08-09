@@ -1,8 +1,29 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-<script src="https://player.twitch.tv/js/embed/v1.js"></script>
+﻿<script src="https://player.twitch.tv/js/embed/v1.js"></script>
+<script type="text/javascript">
+    function EnterTournament() {
+        $.ajax({
+            url: '/EnterTournament',
+            type: 'POST',
+        });
+        var btn = document.getElementById("enterButton");
+        btn.disabled = true;
+        btn.innerHTML = "Entered";
+    }
+</script>
+
 <div id="video-embed" class="embed-responsive embed-responsive-21by9"></div>
+@if (User?.Identity?.IsAuthenticated ?? false)
+{
+    <br />
+    if (ViewBag.TournamentEntered)
+    {
+<button class="btn btn-primary float-right" id="enterButton" onclick="EnterTournament()" disabled>Entered</button>
+    }
+    else
+    {
+        <button class="btn btn-primary float-right" id="enterButton" onclick="EnterTournament()">Enter Tournaments</button>
+    }
+}
 
 <script type="text/javascript">
     new Twitch.Embed("video-embed", {

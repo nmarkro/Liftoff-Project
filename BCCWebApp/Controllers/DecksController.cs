@@ -16,7 +16,7 @@ namespace BCCWebApp.Controllers
 {
     public class DecksController : Controller
     {
-        private BCCDbContext context;
+        private readonly BCCDbContext context;
 
         public DecksController(BCCDbContext dbContext)
         {
@@ -29,6 +29,7 @@ namespace BCCWebApp.Controllers
         {
             ViewBag.Decks = context.Decks.Where(d => d.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value).ToList();
             ViewBag.SelectedDeckId = context.Users.Where(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault().CurrentDeckId;
+            ViewBag.User = context.Users.Find(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             return View();
         }
@@ -100,12 +101,12 @@ namespace BCCWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                string naviCode = generateNaviCode(addOrEditDeckViewModel);
+                string naviCode = GenerateNaviCode(addOrEditDeckViewModel);
                 Deck newDeck = new Deck
                 {
                     UserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value,
                     Name = addOrEditDeckViewModel.DeckName,
-                    NaviName = makeNaviName(User.Identity.Name),
+                    NaviName = MakeNaviName(User.Identity.Name),
                     NaviCode = naviCode,
                     Wins = 0,
                     Battles = 0
@@ -127,7 +128,7 @@ namespace BCCWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                string naviCode = generateNaviCode(addOrEditDeckViewModel);
+                string naviCode = GenerateNaviCode(addOrEditDeckViewModel);
 
                 Deck deck = context.Decks.Find(addOrEditDeckViewModel.DeckId);
                 if (deck != null)
@@ -154,21 +155,25 @@ namespace BCCWebApp.Controllers
 
         [Authorize]
         [HttpPut("/decks/SetChosenDeck")]
-        public void SetChosenDeck(int chosenId)
+        public IActionResult SetChosenDeck(int chosenId)
         {
-            Deck chosenDeck = context.Decks.Where(d => d.Id == chosenId).FirstOrDefault();
+            Deck chosenDeck = context.Decks.Find(chosenId);
             if (chosenDeck != null)
             {
-                if (chosenDeck.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                if (chosenDeck.UserId == userId)
                 {
-                    User appUser = context.Users.Where(u => u.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault();
+                    User appUser = context.Users.Find(userId);
                     appUser.CurrentDeckId = chosenId;
                     context.SaveChanges();
+
+                    return Json("Ok");
                 }
             }
+            return Json("Bad Request");
         }
 
-        private string makeNaviName(string name)
+        private string MakeNaviName(string name)
         {
             string naviName = name.ToUpper();
             if (naviName.Length > 4)
@@ -187,9 +192,9 @@ namespace BCCWebApp.Controllers
             return naviName;
         }
 
-        private string generateNaviCode(AddOrEditDeckViewModel addOrEditDeckViewModel)
+        private string GenerateNaviCode(AddOrEditDeckViewModel addOrEditDeckViewModel)
         {
-            string naviName = makeNaviName(User.Identity.Name);
+            string naviName = MakeNaviName(User.Identity.Name);
 
             int[] data = new int[]
             {

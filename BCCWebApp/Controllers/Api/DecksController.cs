@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BCCWebApp.Data;
 using BCCWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BCCWebApp.Controllers.Api
 {
+    [Authorize(AuthenticationSchemes = "Jwt")]
     [Route("api/[controller]")]
     [ApiController]
     public class DecksController : ControllerBase

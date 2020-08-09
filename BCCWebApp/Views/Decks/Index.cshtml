@@ -2,7 +2,8 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 <script type="text/javascript">
-    function SetChosenDeck(chosenId) {
+    function SetChosenDeck() {
+        var chosenId = document.querySelector('input[name="chosen-deck"]:checked').value;
         $.ajax({
             url: '/Decks/SetChosenDeck',
             type: 'PUT',
@@ -12,44 +13,78 @@
 </script>
 <h1 class="display-4">Your Decks</h1>
 
+<table class="table">
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Deck</th>
+        <th>Wins / Battles</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @if (ViewBag.Decks.Count != 0)
+    {
+        <link rel="stylesheet" href="~/css/ncgen/style.css">
 
-@if (ViewBag.Decks.Count == 0)
-{
-    <p>No decks yet!</p>
-}
-else
-{
-    <link rel="stylesheet" href="~/css/ncgen/style.css">
-    <table class="table">
-        <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Deck</th>
-            <th></th>
-            <th></th>
-        </tr>
         @foreach (Deck deck in ViewBag.Decks)
         {
+            string winrate = "";
+            @if (deck.Battles == 0)
+            {
+                winrate = "No Battles Yet!";
+            }
+            else
+            {
+                winrate = (deck.Wins / (double)deck.Battles).ToString("P2");
+            }
             <tr>
                 <td>
                     @if (deck.Id == ViewBag.SelectedDeckId)
                     {
-                        <input type="radio" name="chosen-deck" onclick="SetChosenDeck(@deck.Id);" value="@deck.Id" checked="checked" />
+                        <input type="radio" name="chosen-deck" onclick="SetChosenDeck();" value="@deck.Id" checked="checked" />
                     }
                     else
                     {
-                        <input type="radio" name="chosen-deck" onclick="SetChosenDeck(@deck.Id);" value="@deck.Id" />
+                        <input type="radio" name="chosen-deck" onclick="SetChosenDeck();" value="@deck.Id" />
                     }
                 </td>
                 <td>@deck.Name</td>
                 <td>
                     <partial name="_DeckViewer" model="new BCCWebApp.ViewModel.DeckViewerViewModel(deck.NaviName, deck.NaviCode)" />
                 </td>
+                <td>
+                    <a href="#" data-toggle="tooltip" title="@winrate Win Rate">@deck.Wins / @deck.Battles</a>
+                </td>
                 <td><a class="btn btn-sm btn-primary" href="~/decks/edit/@deck.Id">Edit</a></td>
                 <td><a class="btn btn-sm btn-danger" href="~/decks/delete/@deck.Id">Delete</a></td>
             </tr>
         }
-    </table>
-}
+    }
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+            @{
+                string totalWinRate = "";
+                @if (ViewBag.User.TotalBattles == 0)
+                {
+                    totalWinRate = "No Battles Yet!";
+                }
+                else
+                {
+                    totalWinRate = (ViewBag.User.TotalWins / (double)ViewBag.User.TotalBattles).ToString("P2");
+                }
+            }
+            <a href="#" data-toggle="tooltip" title="@totalWinRate Total Win Rate">@ViewBag.User.TotalWins / @ViewBag.User.TotalBattles</a>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
 <a class="btn btn-sm btn-primary" asp-controller="Decks" asp-action="Add">New Deck</a>
 @*<a class="btn btn-sm btn-secondary" asp-controller="Decks" asp-action="Import">Import Deck</a>*@
+
+<script type="text/javascript">
+    
+</script>

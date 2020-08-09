@@ -5,10 +5,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using BCCWebApp.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +20,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BCCWebApp
 {
@@ -77,6 +82,30 @@ namespace BCCWebApp
                             response.EnsureSuccessStatusCode();
                             var json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
                             context.RunClaimActions(json.RootElement);
+                        }
+                    };
+                })
+                .AddJwtBearer("Jwt", options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = false;
+
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = Configuration["Authentication:Jwt:Issuer"],
+                        ValidAudience = Configuration["Authentication:Jwt:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Authentication:Jwt:Secret"]))
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            if (context.Request.Query.ContainsKey("token"))
+                            {
+                                context.Token = context.Request.Query["token"];
+                            }
+                            return Task.CompletedTask;
                         }
                     };
                 });

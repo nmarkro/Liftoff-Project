@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BCCWebApp.Data;
 using BCCWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace BCCWebApp.Controllers.Api
 {
+    [Authorize(AuthenticationSchemes = "Jwt")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase

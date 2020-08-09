@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using BCCWebApp.Data;
 using BCCWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using SQLitePCL;
 
 namespace BCCWebApp.Controllers.Api
 {
@@ -18,6 +23,10 @@ namespace BCCWebApp.Controllers.Api
         public string DeckNaviName { get; set; }
         public string DeckNaviCode { get; set; }
         
+        public TournamentEntry()
+        {
+        }
+
         public TournamentEntry(User user, Deck deck)
         {
             UserId = user.Id;
@@ -28,12 +37,13 @@ namespace BCCWebApp.Controllers.Api
         }
     }
 
+    [Authorize(AuthenticationSchemes = "Jwt")]
     [Route("api/[controller]")]
     [ApiController]
     public class TournamentController : ControllerBase
     {
         private readonly BCCDbContext _context; 
-        private Random rnd;
+        private readonly Random rnd;
 
         public TournamentController(BCCDbContext context)
         {
@@ -64,7 +74,7 @@ namespace BCCWebApp.Controllers.Api
                 }
             }
 
-            // Add users that have entered the tournament and have a deck currently selected 2nd
+            // Add users that have NOT entered the tournament but have a deck currently selected 2nd
             if (entries.Count < size)
             {
                 List<User> usersWithDeck = await _context.Users.Where(u => u.CurrentDeckId != null).ToListAsync();
@@ -88,7 +98,7 @@ namespace BCCWebApp.Controllers.Api
                 }
             }
 
-            // Add random decks w/ users last
+            // Add random decks with users last
             if (entries.Count < size)
             {
                 List<Deck> decks = await _context.Decks.Where(d => d.UserId != null).ToListAsync();
@@ -118,6 +128,48 @@ namespace BCCWebApp.Controllers.Api
             }
 
             return entries.OrderBy(x => rnd.Next()).Take(size).ToList();
+        }
+
+        [HttpPost]
+        [Route("~/api/[controller]/match")]
+        public async Task<IActionResult> PostMatch([FromForm] string payload)
+        {
+            Dictionary<string, TournamentEntry> payloadJson = JsonConvert.DeserializeObject<Dictionary<string, TournamentEntry>>(payload);
+
+            var winner = payloadJson["winner"];
+            var loser = payloadJson["loser"];
+
+            User winnerUser = await _context.Users.FindAsync(winner.UserId);
+            User loserUser = await _context.Users.FindAsync(loser.UserId);
+
+            Deck winnerDeck = await _context.Decks.FindAsync(winner.DeckId);
+            Deck loserDeck = await _context.Decks.FindAsync(loser.DeckId);
+
+            winnerUser.TotalWins++;
+            winnerDeck.Wins++;
+
+            winnerUser.TotalBattles++;
+            loserUser.TotalBattles++;
+            winnerDeck.Battles++;
+            loserDeck.Battles++;
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("~/api/[controller]/purge")]
+        public async Task<IActionResult> Purge()
+        {
+            List<User> enteredUsers = _context.Users.Where(u => u.TorunamentRegistered).ToList();
+            foreach(User u in enteredUsers)
+            {
+                u.TorunamentRegistered = false;
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
